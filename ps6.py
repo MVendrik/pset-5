@@ -112,6 +112,7 @@ class Message(object):
             value += shift
             value = chr(value)
             shift_Dict[char] = value
+            print()
         
         
     def apply_shift(self, shift):
