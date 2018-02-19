@@ -1,5 +1,5 @@
 import string
-
+import collections
 ### DO NOT MODIFY THIS FUNCTION ###
 def load_words(file_name):
     '''
@@ -102,17 +102,31 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        shift_Dict = {}
+        shift_Dict = collections.OrderedDict()
         lowercase = string.ascii_lowercase
         uppercase = string.ascii_uppercase
-        alfabet = lowercase + uppercase
-
-        for char in alfabet:
+    
+        for char in lowercase:
             value = ord(char)
             value += shift
-            value = chr(value)
+            if value > 122:
+                value = 96 + value % 122
+                value = chr(value)
+            else: 
+                value = chr(value)
+                shift_Dict[char] = value
+        
+        for char in uppercase:
+            value = ord(char)
+            value += shift
+            if value > 90:
+                value = 64 + value % 90
+                value = chr(value)
+            else: 
+                value = chr(value)
             shift_Dict[char] = value
-            print()
+            
+        return shift_Dict
         
         
     def apply_shift(self, shift):
@@ -127,7 +141,17 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        encryptedMessage = ''
+        itersText = str(self.message_text)
+        itersDict = self.build_shift_dict(shift)
+        
+        for char in itersText:
+            for key, value in itersDict.items():
+                if char == key:
+                    encryptedMessage += value
+        return encryptedMessage
+        
+
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
