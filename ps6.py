@@ -263,33 +263,44 @@ class CiphertextMessage(Message):
         and the decrypted message text using that shift value
         '''
 
-        BestShiftValue = []
-        BestShiftInt = 0
+        bestanswer = ()
+        mostwordsinlist = 0
 
-        for s in range(1, 27):
-            s = 26- s
-            text = PlaintextMessage.apply_shift(self, s)
-            for word in text:
-                Maximumchecker = 0
+        for s in range(26):
+            shift = 26- s
+            text = PlaintextMessage.apply_shift(self, shift)
+            words=text.split(' ')
+            for word in words:
+                wordsinlist = 0
                 if word in self.valid_words:
-                    Maximumchecker +=1
-            if Maximumchecker > BestShiftInt:
-                BestShiftInt = Maximumchecker
-                BestShiftValue += [s]
-                t = tuple(BestShiftValue)
+                    wordsinlist +=1
+            if wordsinlist > mostwordsinlist:
+                mostwordsinlist = wordsinlist
+                if shift == 26:
+                    shift = 0
+                    bestanswer = (shift, text)
+                else:
+                    bestanswer = (shift, text)
 
-        return t
+        return bestanswer
 
 
 
 
 
 # Example test case (PlaintextMessage)
-plaintext = PlaintextMessage('hello', 2)
-print('Expected Output: jgnnq')
-print('Actual Output:', plaintext.get_message_text_encrypted())
+# plaintext = PlaintextMessage('hello', 2)
+# print('Expected Output: jgnnq')
+# print('Actual Output:', plaintext.get_message_text_encrypted())
+#
+# # Example test case (CiphertextMessage)
+# ciphertext = CiphertextMessage('jgnnq')
+# print('Expected Output:', (24, 'hello'))
+# print('Actual Output:', ciphertext.decrypt_message())
 
-# Example test case (CiphertextMessage)
-ciphertext = CiphertextMessage('jgnnq')
-print('Expected Output:', (24, 'hello'))
-print('Actual Output:', ciphertext.decrypt_message())
+#my test case
+plaintext = PlaintextMessage('boo', 26)
+print('output: ', plaintext.get_message_text_encrypted())
+
+ciphertext = CiphertextMessage('boo')
+print(ciphertext.decrypt_message())
