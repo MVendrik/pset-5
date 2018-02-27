@@ -263,21 +263,22 @@ class CiphertextMessage(Message):
         and the decrypted message text using that shift value
         '''
 
-        BestShiftValue = ()
+        BestShiftValue = []
         BestShiftInt = 0
 
         for s in range(1, 27):
             s = 26- s
-            text = PlaintextMessage.apply_shift(self.message_text, s)
+            text = PlaintextMessage.apply_shift(self, s)
             for word in text:
                 Maximumchecker = 0
                 if word in self.valid_words:
                     Maximumchecker +=1
             if Maximumchecker > BestShiftInt:
                 BestShiftInt = Maximumchecker
-                BestShiftValue += s
+                BestShiftValue += [s]
+                t = tuple(BestShiftValue)
 
-        return BestShiftValue
+        return t
 
 
 
